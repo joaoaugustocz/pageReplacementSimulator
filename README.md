@@ -134,3 +134,108 @@ Este código implementa o algoritmo FIFO de acordo com a explicação vista em a
 A página mais antiga (a que está no início da fila) é removida sempre que uma nova página precisa ser carregada e não há espaço disponível.
 O algoritmo não leva em consideração se a página mais antiga ainda está sendo usada com frequência, o que é uma das suas principais desvantagens.
 Ele tem uma implementação simples, mas, como mencionado, não oferece os melhores resultados, especialmente quando as páginas mais antigas ainda são relevantes para o sistema.
+
+
+
+# Objetivo do Algoritmo LRU
+O algoritmo LRU (Least Recently Used) substitui a página que foi menos recentemente usada. Ele é mais eficiente que o FIFO porque leva em consideração o uso das páginas, substituindo aquela que não foi acessada por mais tempo.
+
+## Explicação do Código Passo a Passo:
+1. Declaração de Dependências
+``` java
+import java.util.ArrayList;
+```
+O código usa uma estrutura de lista (ArrayList) para rastrear a ordem de uso das páginas, atualizando a ordem sempre que uma página é acessada.
+
+2. Método Principal lru()
+``` java
+public static int lru(int[] paginas, int tamanhoQuadro, boolean imprime) {
+```
+- `int[] paginas`: Um array de inteiros que representa a sequência de páginas a serem acessadas.
+- `int tamanhoQuadro`: O número de quadros de página disponíveis na memória.
+- `boolean imprime`: Um parâmetro opcional que, se verdadeiro, imprime o estado da tabela de páginas a cada iteração.
+
+3. Inicialização da Tabela de Páginas
+``` java
+EntradaTabelaPaginas[] tabelaPaginas = new EntradaTabelaPaginas[tamanhoQuadro];
+for (int i = 0; i < tamanhoQuadro; i++) {
+    tabelaPaginas[i] = new EntradaTabelaPaginas();  // Inicializando os quadros de página
+}
+```
+A tabela de páginas é criada com base no número de quadros disponíveis. Cada entrada na tabela representa uma página na memória.
+
+4. Inicialização da Lista de Uso
+``` java
+ArrayList<Integer> listaUso = new ArrayList<>();  // Para rastrear a ordem de uso das páginas
+int faltasPagina = 0;
+```
+- **listaUso**: Armazena as páginas na ordem em que foram acessadas. A página menos recentemente usada está no início da lista.
+
+- **faltasPagina**: Contador de faltas de página.
+
+5. Iteração pelas Páginas
+``` java
+for (int pagina : paginas) {
+    boolean paginaEncontrada = false;
+```
+O código percorre todas as páginas solicitadas, verificando se elas já estão na memória.
+
+6. Verificação se a Página já Está na Memória
+``` java
+for (EntradaTabelaPaginas entrada : tabelaPaginas) {
+    if (entrada.getNumeroQuadroPagina() == pagina && entrada.isPresente()) {
+        paginaEncontrada = true;
+        listaUso.remove((Integer) pagina);  // Move para o final da lista
+        listaUso.add(pagina);
+        break;
+    }
+}
+```
+Se a página já estiver presente na memória, ela é removida da lista de uso e adicionada ao final, indicando que foi recentemente usada.
+
+7. Tratamento de Faltas de Página
+``` java
+if (!paginaEncontrada) {
+    faltasPagina++;
+```
+Se a página não for encontrada na memória, ocorre uma falta de página e o contador é incrementado.
+
+8. Substituição da Página Menos Recentemente Usada
+``` java
+if (listaUso.size() == tamanhoQuadro) {
+    int paginaSubstituir = listaUso.remove(0);  // Remove a primeira página (menos usada)
+    for (EntradaTabelaPaginas entrada : tabelaPaginas) {
+        if (entrada.getNumeroQuadroPagina() == paginaSubstituir) {
+            entrada.setPresente(false);  // Marca como ausente
+            break;
+        }
+    }
+}
+```
+Se a memória estiver cheia, a página menos recentemente usada (no início da lista) é removida para dar lugar à nova página.
+
+9. Adicionando a Nova Página à Memória
+``` java
+for (EntradaTabelaPaginas entrada : tabelaPaginas) {
+    if (!entrada.isPresente()) {
+        entrada.setNumeroQuadroPagina(pagina);
+        entrada.setPresente(true);
+        entrada.setReferenciada(false);
+        listaUso.add(pagina);
+        break;
+    }
+}
+```
+A nova página é carregada na memória e adicionada ao final da lista de uso, indicando que foi recentemente acessada.
+
+10. Impressão do Estado da Tabela de Páginas
+``` java
+if(imprime) imprimirTabelaPaginas(tabelaPaginas);
+```
+Se o parâmetro imprime for verdadeiro, a tabela de páginas é impressa para visualização.
+
+11. Retorno do Número de Faltas de Página
+``` java
+return faltasPagina;
+```
+O número total de faltas de página é retornado.
