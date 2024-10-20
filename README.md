@@ -9,15 +9,18 @@ import java.util.LinkedList;
 import java.util.Queue;
 ```
 
-### LinkedList e Queue: O código usa uma estrutura de fila (Queue) para armazenar as páginas na ordem em que são carregadas na memória. Como uma fila FIFO (Primeiro a Entrar, Primeiro a Sair), a página que está há mais tempo na memória é a primeira a ser removida.
+LinkedList e Queue: O código usa uma estrutura de fila (Queue) para armazenar as páginas na ordem em que são carregadas na memória. Como uma fila FIFO (Primeiro a Entrar, Primeiro a Sair), a página que está há mais tempo na memória é a primeira a ser removida.
 2. Método Principal fifo()
 
 ``` java
 public static int fifo(int[] paginas, int tamanhoQuadro, boolean imprime) {
 ```
-### int[] paginas: Um array de inteiros que representa a sequência de páginas a serem acessadas.
-### int tamanhoQuadro: O número de quadros de página disponíveis na memória. Esse número limita a quantidade de páginas que podem ser mantidas na memória ao mesmo tempo.
+**int[] paginas**: Um array de inteiros que representa a sequência de páginas a serem acessadas.
+
+int tamanhoQuadro: O número de quadros de página disponíveis na memória. Esse número limita a quantidade de páginas que podem ser mantidas na memória ao mesmo tempo.
+
 boolean imprime: Um parâmetro opcional que, se verdadeiro, imprime o estado da tabela de páginas a cada iteração. Isso ajuda a visualizar o comportamento do algoritmo.
+
 3. Inicialização da Tabela de Páginas
 java
 Copiar código
