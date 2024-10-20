@@ -10,6 +10,7 @@ import java.util.Queue;
 ```
 
 LinkedList e Queue: O código usa uma estrutura de fila (Queue) para armazenar as páginas na ordem em que são carregadas na memória. Como uma fila FIFO (Primeiro a Entrar, Primeiro a Sair), a página que está há mais tempo na memória é a primeira a ser removida.
+
 2. Método Principal fifo()
 
 ``` java
