@@ -1,11 +1,13 @@
-#Objetivo do Algoritmo FIFO
+# Objetivo do Algoritmo FIFO
 O algoritmo FIFO substitui a página mais antiga que está na memória para dar espaço a uma nova página. Ele mantém uma fila das páginas em ordem de chegada e remove sempre a página que está no início da fila, independentemente da importância ou do quanto ela está sendo acessada.
 
-##Explicação do Código Passo a Passo:
+## Explicação do Código Passo a Passo:
 1. Declaração de Dependências
 
-`import java.util.LinkedList;
-import java.util.Queue;`
+```
+import java.util.LinkedList;
+import java.util.Queue;
+```
 
 LinkedList e Queue: O código usa uma estrutura de fila (Queue) para armazenar as páginas na ordem em que são carregadas na memória. Como uma fila FIFO (Primeiro a Entrar, Primeiro a Sair), a página que está há mais tempo na memória é a primeira a ser removida.
 2. Método Principal fifo()
