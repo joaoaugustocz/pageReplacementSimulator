@@ -169,9 +169,9 @@ A tabela de páginas é criada com base no número de quadros disponíveis. Cada
 ArrayList<Integer> listaUso = new ArrayList<>();  // Para rastrear a ordem de uso das páginas
 int faltasPagina = 0;
 ```
-- **listaUso**: Armazena as páginas na ordem em que foram acessadas. A página menos recentemente usada está no início da lista.
+- `listaUso`: Armazena as páginas na ordem em que foram acessadas. A página menos recentemente usada está no início da lista.
 
-- **faltasPagina**: Contador de faltas de página.
+- `faltasPagina`: Contador de faltas de página.
 
 5. Iteração pelas Páginas
 ``` java
