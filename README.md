@@ -330,8 +330,102 @@ return faltasPagina;
 ```
 No final da execução do algoritmo, o número total de faltas de página é retornado.
 
-# Conclusão
+## Conclusão
 O algoritmo NFU (Not Frequently Used) mantém um histórico simples da frequência de uso das páginas para decidir quais substituir. As páginas que são acessadas com menos frequência são removidas da memória, e as mais acessadas permanecem. É um algoritmo relativamente simples, mas eficaz em ambientes onde o uso das páginas segue padrões previsíveis.
 
 Seu principal ponto forte é a simplicidade de implementação, mas pode não ser ideal em todos os cenários, pois o algoritmo não considera o tempo desde o último acesso, o que pode resultar na substituição de páginas que podem ser acessadas em breve.
 
+# Objetivo do Algoritmo Relógio (Clock)
+O algoritmo Relógio (Clock) é uma versão otimizada do FIFO que simula o funcionamento de um ponteiro de relógio. Ele utiliza um bit de referência para dar uma "segunda chance" às páginas que foram acessadas recentemente. Se o bit de referência de uma página é 1, ela não é imediatamente removida quando o ponteiro a alcança; ao invés disso, o ponteiro avança e o bit é resetado. Se o bit é 0, a página é substituída.
+
+Esse algoritmo tenta evitar a substituição de páginas que podem ser reutilizadas logo em seguida, sendo uma melhoria sobre o FIFO clássico.
+
+## Explicação do Código Passo a Passo
+1. Declaração de Dependências
+Assim como no NFU, o algoritmo Relógio utiliza apenas as dependências padrão do Java:
+
+``` java
+import java.util.Arrays;
+```
+Essa dependência é usada para manipular arrays e garantir a inicialização adequada.
+
+2. Método Principal relogio()
+``` java
+public static int relogio(int[] paginas, int tamanhoQuadro, boolean imprime) {
+```
+`int[] paginas`: O array que contém a sequência de páginas acessadas.
+`int tamanhoQuadro`: O número de quadros disponíveis na memória.
+`boolean imprime`: Um parâmetro opcional que, se verdadeiro, imprime o estado da memória a cada operação.
+
+
+3. Inicialização da Tabela de Páginas e Ponteiro do Relógio
+``` java
+EntradaTabelaPaginas[] tabelaPaginas = new EntradaTabelaPaginas[tamanhoQuadro];
+int ponteiro = 0;  // Ponteiro que simula o ponteiro de um relógio
+```
+Aqui, inicializamos a tabela de páginas e o ponteiro. O ponteiro funciona como um marcador circular que percorre as páginas na memória, da mesma forma que o ponteiro das horas percorre um relógio.
+
+4. Iteração pelas Páginas e Verificação
+``` java
+for (int pagina : paginas) {
+    boolean paginaEncontrada = false;
+
+    // Verifica se a página já está na memória
+    for (EntradaTabelaPaginas entrada : tabelaPaginas) {
+        if (entrada.getNumeroQuadroPagina() == pagina && entrada.isPresente()) {
+            entrada.setReferenciada(true);  // Marca a página como referenciada
+            paginaEncontrada = true;
+            break;
+        }
+    }
+```
+O algoritmo percorre a sequência de páginas e verifica se cada página já está presente na memória. Se a página já estiver na memória, o bit de referência é ativado, indicando que ela foi acessada recentemente.
+
+5. Tratamento de Faltas de Página e Uso do Ponteiro
+Se a página não estiver na memória, ocorre uma falta de página, e o ponteiro começa a avançar:
+
+``` java
+if (!paginaEncontrada) {
+    faltasPagina++;
+
+    // Enquanto o ponteiro encontrar páginas referenciadas, avança o ponteiro
+    while (tabelaPaginas[ponteiro].isPresente() && tabelaPaginas[ponteiro].isReferenciada()) {
+        tabelaPaginas[ponteiro].setReferenciada(false);  // Reseta o bit de referência
+        ponteiro = (ponteiro + 1) % tamanhoQuadro;  // Move o ponteiro de forma circular
+    }
+```
+Aqui, se a página solicitada não estiver na memória:
+
+O ponteiro percorre a memória em busca de uma página não referenciada (ou seja, com o bit de referência igual a 0).
+Caso o bit de referência seja 1, ele é resetado, e o ponteiro avança.
+Esse comportamento simula a "segunda chance" que é dada às páginas que foram recentemente referenciadas.
+
+6. Substituição da Página
+``` java
+tabelaPaginas[ponteiro].setNumeroQuadroPagina(pagina);
+tabelaPaginas[ponteiro].setPresente(true);
+tabelaPaginas[ponteiro].setReferenciada(true);  // A nova página é referenciada
+ponteiro = (ponteiro + 1) % tamanhoQuadro;  // Avança o ponteiro após a substituição
+```
+Quando o ponteiro encontra uma página com o bit de referência igual a 0, essa página é substituída pela nova página. O bit de referência da nova página é ativado, e o ponteiro avança para a próxima posição.
+
+7. Impressão do Estado da Memória (Opcional)
+``` java
+if (imprime) {
+    imprimirTabelaPaginas(tabelaPaginas);
+}
+```
+
+Se o parâmetro imprime for verdadeiro, o estado da memória é exibido após cada operação. Isso ajuda a entender como o ponteiro avança e as páginas são substituídas.
+
+
+8. Retorno do Número de Faltas de Página
+``` java
+return faltasPagina;
+```
+No final da execução do algoritmo, o número total de faltas de página é retornado.
+
+## Conclusão
+O algoritmo Relógio (Clock) é uma alternativa eficiente ao FIFO, utilizando um bit de referência para identificar páginas que foram acessadas recentemente. Ele fornece uma "segunda chance" às páginas que são frequentemente acessadas, evitando que sejam substituídas de maneira prematura.
+
+Em termos práticos, o algoritmo simula o funcionamento de um ponteiro de relógio que avança circularmente pela memória. Se ele encontrar uma página que foi referenciada recentemente, a página não é substituída imediatamente, e o ponteiro continua avançando. Isso torna o algoritmo mais eficiente do que o FIFO tradicional, especialmente em sistemas onde o padrão de acesso às páginas é previsível.
