@@ -240,6 +240,12 @@ return faltasPagina;
 ```
 O número total de faltas de página é retornado.
 
+## Conclusão
+O algoritmo LRU (Least Recently Used) é uma solução eficaz para a substituição de páginas, utilizando a lógica de que a página menos recentemente usada é a mais provável a não ser necessária no futuro próximo. Isso o torna uma melhoria significativa em relação ao algoritmo FIFO, que simplesmente substitui as páginas com base na ordem de chegada, sem considerar seu uso recente.
+
+O LRU se destaca por ser intuitivo e eficiente em cenários onde o padrão de acesso às páginas é previsível, garantindo que as páginas mais usadas recentemente permaneçam na memória. No entanto, sua implementação pode exigir estruturas de dados adicionais, como listas ou pilhas, para rastrear a ordem de uso das páginas, o que pode adicionar uma sobrecarga computacional, dependendo da abordagem escolhida.
+
+Ainda assim, o LRU oferece uma boa relação custo-benefício em termos de desempenho para muitos sistemas, especialmente onde a localidade temporal (uso recente de páginas) é um fator chave no padrão de acessos.
 
 # Objetivo do Algoritmo NFU
 O algoritmo NFU (Not Frequently Used), ou "Não Frequentemente Usado", é uma técnica de substituição de páginas que prioriza as páginas que são usadas com menos frequência. Cada página tem um contador associado que é incrementado toda vez que a página é acessada. Quando é necessário substituir uma página, a página com o menor valor no contador é a escolhida, assumindo que ela é a menos utilizada.
