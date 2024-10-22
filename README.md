@@ -239,3 +239,99 @@ Se o parâmetro imprime for verdadeiro, a tabela de páginas é impressa para vi
 return faltasPagina;
 ```
 O número total de faltas de página é retornado.
+
+
+# Objetivo do Algoritmo NFU
+O algoritmo NFU (Not Frequently Used), ou "Não Frequentemente Usado", é uma técnica de substituição de páginas que prioriza as páginas que são usadas com menos frequência. Cada página tem um contador associado que é incrementado toda vez que a página é acessada. Quando é necessário substituir uma página, a página com o menor valor no contador é a escolhida, assumindo que ela é a menos utilizada.
+
+Esse algoritmo é útil em cenários onde o uso das páginas pode ser esporádico, e queremos manter na memória as páginas que são acessadas mais vezes.
+
+Explicação do Código Passo a Passo
+1. Declaração de Dependências
+O código para o NFU não requer bibliotecas externas além das comuns do Java. Ele opera diretamente sobre os arrays de páginas e quadros de memória.
+
+``` java
+import java.util.Arrays;
+```
+Essa dependência é usada para inicializar e manipular arrays.
+
+2. Método Principal nfu()
+``` java
+public static int nfu(int[] paginas, int tamanhoQuadro, boolean imprime) {
+```
+`int[] paginas`: O array que contém a sequência de páginas solicitadas.
+`int tamanhoQuadro`: O número de quadros disponíveis na memória.
+`boolean imprime`: Um parâmetro opcional que, se verdadeiro, imprime o estado da memória após cada operação.
+
+3. Inicialização da Tabela de Páginas e Contadores
+``` java
+EntradaTabelaPaginas[] tabelaPaginas = new EntradaTabelaPaginas[tamanhoQuadro];
+int[] contadoresUso = new int[tamanhoQuadro]; // Contadores para o uso de cada página
+Arrays.fill(contadoresUso, 0);
+```
+
+Aqui, criamos dois arrays:
+
+
+`tabelaPaginas`: Para armazenar o número de páginas presentes em cada quadro de memória.
+`contadoresUso`: Um array para registrar quantas vezes cada página foi acessada. Inicialmente, todos os contadores são preenchidos com zero.
+
+4. Iteração pelas Páginas
+``` java
+for (int pagina : paginas) {
+    boolean paginaEncontrada = false;
+
+    // Verifica se a página já está na memória
+    for (int i = 0; i < tamanhoQuadro; i++) {
+        if (tabelaPaginas[i].getNumeroQuadroPagina() == pagina && tabelaPaginas[i].isPresente()) {
+            contadoresUso[i]++; // Incrementa o contador de uso
+            paginaEncontrada = true;
+            break;
+        }
+    }
+```
+O código percorre a sequência de páginas solicitadas e verifica se a página já está na memória. Se a página estiver presente, o contador de uso associado a essa página é incrementado.
+
+5. Tratamento de Faltas de Página
+``` java
+if (!paginaEncontrada) {
+    faltasPagina++;
+    // Encontrar a página com o menor contador de uso
+    int indiceSubstituir = 0;
+    for (int i = 1; i < tamanhoQuadro; i++) {
+        if (contadoresUso[i] < contadoresUso[indiceSubstituir]) {
+            indiceSubstituir = i;
+        }
+    }
+```
+Se a página solicitada não estiver na memória (falta de página), o contador de faltas de página é incrementado. O algoritmo então busca a página com o menor contador de uso, que será substituída.
+
+6. Substituição da Página
+``` java
+tabelaPaginas[indiceSubstituir].setNumeroQuadroPagina(pagina);
+tabelaPaginas[indiceSubstituir].setPresente(true);
+contadoresUso[indiceSubstituir] = 1; // Inicializa o contador para a nova página
+```
+Uma vez encontrada a página menos usada, ela é removida da memória e substituída pela nova página. O contador de uso para essa nova página é inicializado com 1.
+
+7. Impressão do Estado da Memória (Opcional)
+Se a variável imprime for verdadeira, o estado atual da tabela de páginas é exibido após cada operação.
+
+``` java
+if (imprime) {
+    imprimirTabelaPaginas(tabelaPaginas);
+}
+```
+Esse método é útil para debugar o comportamento do algoritmo, exibindo quais páginas estão sendo armazenadas na memória e suas contagens de uso.
+
+8. Retorno do Número de Faltas de Página
+``` java
+return faltasPagina;
+```
+No final da execução do algoritmo, o número total de faltas de página é retornado.
+
+# Conclusão
+O algoritmo NFU (Not Frequently Used) mantém um histórico simples da frequência de uso das páginas para decidir quais substituir. As páginas que são acessadas com menos frequência são removidas da memória, e as mais acessadas permanecem. É um algoritmo relativamente simples, mas eficaz em ambientes onde o uso das páginas segue padrões previsíveis.
+
+Seu principal ponto forte é a simplicidade de implementação, mas pode não ser ideal em todos os cenários, pois o algoritmo não considera o tempo desde o último acesso, o que pode resultar na substituição de páginas que podem ser acessadas em breve.
+
