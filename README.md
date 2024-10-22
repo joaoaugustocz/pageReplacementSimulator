@@ -1,4 +1,16 @@
-# Objetivo do Algoritmo FIFO
+# Introdução
+Este projeto tem como objetivo comparar o desempenho de quatro algoritmos clássicos de substituição de páginas: FIFO (First In, First Out), LRU (Least Recently Used), Relógio (Clock) e NFU (Not Frequently Used). A substituição de páginas é uma técnica essencial para o gerenciamento de memória em sistemas operacionais, especialmente em cenários de multitarefa, onde os processos precisam compartilhar o espaço limitado de memória disponível.
+
+Cada algoritmo tem suas particularidades. O FIFO é simples, mas pode acabar substituindo páginas que ainda estão sendo usadas com frequência, já que ele não considera o uso recente. O LRU é mais sofisticado, levando em conta quais páginas foram usadas recentemente, mas isso pode implicar em uma maior complexidade na sua implementação. O Relógio, por sua vez, é uma versão otimizada do FIFO, que utiliza um bit de referência para dar uma "segunda chance" às páginas, tentando encontrar um equilíbrio entre eficiência e simplicidade. Por fim, o NFU mantém um contador de frequência de uso das páginas e substitui a que foi menos usada ao longo do tempo, o que pode funcionar bem em cenários com padrões de acesso previsíveis.
+
+Diante dessas características, podemos deduzir que o LRU provavelmente deve ter a melhor performance entre os quatro algoritmos, já que ele tenta garantir que as páginas mais usadas recentemente permaneçam na memória, evitando a substituição de páginas importantes. O Relógio também pode apresentar um bom desempenho, pois é uma otimização do FIFO. Já o FIFO, por sua simplicidade, tende a ter uma performance inferior, pois ele não leva em consideração o uso das páginas. O NFU, por se basear em contadores, pode se sair bem em alguns casos, mas pode apresentar problemas ao não considerar o tempo desde o último acesso.
+
+
+
+
+# Algoritmo FIFO (First In First Out)
+
+## Objetivo do Algoritmo FIFO
 O algoritmo FIFO substitui a página mais antiga que está na memória para dar espaço a uma nova página. Ele mantém uma fila das páginas em ordem de chegada e remove sempre a página que está no início da fila, independentemente da importância ou do quanto ela está sendo acessada.
 
 ## Explicação do Código Passo a Passo:
@@ -38,9 +50,9 @@ Inicialmente, todos os quadros estão vazios (sem páginas).
 Queue<Integer> filaMemoria = new LinkedList<>();
 int faltasPagina = 0;
 ```
-- **filaMemoria**: Armazena as páginas na ordem em que são carregadas na memória. Quando uma nova página é carregada, ela é colocada no final da fila, e a página mais antiga é removida.
+- `filaMemoria`: Armazena as páginas na ordem em que são carregadas na memória. Quando uma nova página é carregada, ela é colocada no final da fila, e a página mais antiga é removida.
 
-- **faltasPagina**: Contador que armazena o número de faltas de página (quando uma página que não está na memória é solicitada e precisa ser carregada).
+- `faltasPagina`: Contador que armazena o número de faltas de página (quando uma página que não está na memória é solicitada e precisa ser carregada).
 
 5. Iteração pelas Páginas
 ``` java
@@ -136,8 +148,9 @@ O algoritmo não leva em consideração se a página mais antiga ainda está sen
 Ele tem uma implementação simples, mas, como mencionado, não oferece os melhores resultados, especialmente quando as páginas mais antigas ainda são relevantes para o sistema.
 
 
+# Algoritmo LRU (Least Recently Used)
 
-# Objetivo do Algoritmo LRU
+## Objetivo do Algoritmo LRU
 O algoritmo LRU (Least Recently Used) substitui a página que foi menos recentemente usada. Ele é mais eficiente que o FIFO porque leva em consideração o uso das páginas, substituindo aquela que não foi acessada por mais tempo.
 
 ## Explicação do Código Passo a Passo:
@@ -247,7 +260,8 @@ O LRU se destaca por ser intuitivo e eficiente em cenários onde o padrão de ac
 
 Ainda assim, o LRU oferece uma boa relação custo-benefício em termos de desempenho para muitos sistemas, especialmente onde a localidade temporal (uso recente de páginas) é um fator chave no padrão de acessos.
 
-# Objetivo do Algoritmo NFU
+# Algoritmo NFU (Not Frequently Used)
+## Objetivo do Algoritmo NFU
 O algoritmo NFU (Not Frequently Used), ou "Não Frequentemente Usado", é uma técnica de substituição de páginas que prioriza as páginas que são usadas com menos frequência. Cada página tem um contador associado que é incrementado toda vez que a página é acessada. Quando é necessário substituir uma página, a página com o menor valor no contador é a escolhida, assumindo que ela é a menos utilizada.
 
 Esse algoritmo é útil em cenários onde o uso das páginas pode ser esporádico, e queremos manter na memória as páginas que são acessadas mais vezes.
@@ -341,7 +355,9 @@ O algoritmo NFU (Not Frequently Used) mantém um histórico simples da frequênc
 
 Seu principal ponto forte é a simplicidade de implementação, mas pode não ser ideal em todos os cenários, pois o algoritmo não considera o tempo desde o último acesso, o que pode resultar na substituição de páginas que podem ser acessadas em breve.
 
-# Objetivo do Algoritmo Relógio (Clock)
+
+# Algoritmo Relógio (Clock)
+## Objetivo do Algoritmo Relógio (Clock)
 O algoritmo Relógio (Clock) é uma versão otimizada do FIFO que simula o funcionamento de um ponteiro de relógio. Ele utiliza um bit de referência para dar uma "segunda chance" às páginas que foram acessadas recentemente. Se o bit de referência de uma página é 1, ela não é imediatamente removida quando o ponteiro a alcança; ao invés disso, o ponteiro avança e o bit é resetado. Se o bit é 0, a página é substituída.
 
 Esse algoritmo tenta evitar a substituição de páginas que podem ser reutilizadas logo em seguida, sendo uma melhoria sobre o FIFO clássico.
@@ -435,3 +451,16 @@ No final da execução do algoritmo, o número total de faltas de página é ret
 O algoritmo Relógio (Clock) é uma alternativa eficiente ao FIFO, utilizando um bit de referência para identificar páginas que foram acessadas recentemente. Ele fornece uma "segunda chance" às páginas que são frequentemente acessadas, evitando que sejam substituídas de maneira prematura.
 
 Em termos práticos, o algoritmo simula o funcionamento de um ponteiro de relógio que avança circularmente pela memória. Se ele encontrar uma página que foi referenciada recentemente, a página não é substituída imediatamente, e o ponteiro continua avançando. Isso torna o algoritmo mais eficiente do que o FIFO tradicional, especialmente em sistemas onde o padrão de acesso às páginas é previsível.
+
+
+# Considerações Finais
+
+Após a implementação e análise dos algoritmos FIFO, LRU, Relógio e NFU, podemos observar que cada um apresenta vantagens e desvantagens em diferentes cenários de uso. O LRU, como esperado, geralmente performa melhor em ambientes com padrões de uso previsíveis, já que ele sempre tenta manter as páginas mais recentemente usadas na memória. No entanto, sua implementação pode ser mais custosa devido à necessidade de rastrear a ordem de uso das páginas.
+
+O Relógio se mostrou uma alternativa eficiente ao FIFO, oferecendo uma solução simples e com boa performance, ao fornecer uma "segunda chance" às páginas referenciadas recentemente. Ele representa um bom compromisso entre a simplicidade do FIFO e a complexidade do LRU.
+
+O FIFO, apesar de ser o algoritmo mais simples, tem o pior desempenho nos testes, já que ele não leva em consideração o uso recente das páginas. Isso faz com que ele acabe substituindo páginas que podem ainda ser úteis, especialmente em sistemas com padrões de acesso irregulares.
+
+Por fim, o NFU apresentou resultados medianos, sendo eficaz em cenários onde as páginas menos frequentemente usadas podem realmente ser substituídas com segurança. No entanto, como ele não considera o tempo desde o último uso, em alguns casos, ele pode acabar retendo páginas que foram usadas muito no passado, mas que não são mais relevantes.
+
+Portanto, para a maioria dos cenários, o LRU deve ser a escolha mais apropriada, com o Relógio sendo uma boa alternativa em sistemas onde o custo de implementação do LRU não compensa os benefícios esperados.
