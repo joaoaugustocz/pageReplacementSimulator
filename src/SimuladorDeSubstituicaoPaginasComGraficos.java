@@ -117,19 +117,32 @@ public class SimuladorDeSubstituicaoPaginasComGraficos extends JFrame {
         areaResultados.append("LRU: " + resultadoLRU + " faltas de página\n");
         areaResultados.append("Relógio: " + resultadoRelogio + " faltas de página\n");
         areaResultados.append("NFU: " + resultadoNFU + " faltas de página\n");
+        areaResultados.append("Melhor: " + getMin(resultadoFIFO, resultadoLRU, resultadoRelogio, resultadoNFU) + "\n");
+        
 
         // Atualizar o gráfico com os resultados
         atualizarGrafico(resultadoFIFO, resultadoLRU, resultadoRelogio, resultadoNFU);
     }
 
+    private int getMin(int a, int b, int c, int d)
+    {
+         
+        // Usa a função Math.min para comparar os valores
+        int menorPrimeiroPar = Math.min(a, b);
+        int menorSegundoPar = Math.min(c, d);
+        
+        // Compara os menores valores dos dois pares
+        return Math.min(menorPrimeiroPar, menorSegundoPar);
+        
+    }
     // Função para gerar uma sequência aleatória de páginas
     private void gerarSequenciaAleatoria() {
         Random random = new Random();
-        int tamanhoSequencia = random.nextInt(20) + 10; // Gera uma sequência entre 5 e 15 páginas
+        int tamanhoSequencia = random.nextInt(50) + 20; // Gera uma sequência entre 5 e 15 páginas
         StringBuilder sequencia = new StringBuilder();
 
         for (int i = 0; i < tamanhoSequencia; i++) {
-            int paginaAleatoria = random.nextInt(5) + 1; // Páginas aleatórias entre 1 e 10
+            int paginaAleatoria = random.nextInt(20) + 10; // Páginas aleatórias entre 1 e 10
             sequencia.append(paginaAleatoria).append(" ");
         }
 
@@ -166,7 +179,7 @@ public class SimuladorDeSubstituicaoPaginasComGraficos extends JFrame {
         dataset.addValue(resultadoLRU, "Faltas de Página", "LRU");
         dataset.addValue(resultadoRelogio, "Faltas de Página", "Relógio");
         dataset.addValue(resultadoNFU, "Faltas de Página", "NFU");
-
+        
         return dataset;
     }
 
@@ -179,3 +192,27 @@ public class SimuladorDeSubstituicaoPaginasComGraficos extends JFrame {
         });
     }
 }
+
+
+//FIFO desvantagem:
+//1 2 3 4 1 2 5 1 2 3 4 5
+//3
+
+//  LRU  vantagem
+//7 0 1 2 0 3 0 4 2 3 0 3 2
+//4
+//Desvantagem:
+//0 1 2 3 0 1 4 0 1 2 3 4
+//3
+
+
+//Relogio Equilibrio
+//1 2 3 4 1 2 5 1 2 3 4 5
+//3
+//Vantagem
+//2 3 2 1 5 2 4 5 3 2 1 4 5
+//3
+
+//NFU desvantagem
+//1 1 1 2 2 2 3 3 3 4 4 4 1 2 3 4
+//3

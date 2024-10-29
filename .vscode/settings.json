@@ -3,6 +3,6 @@
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\czjoa\\Downloads\\jfreechart-1.0.19\\jfreechart-1.0.19\\jfreechart-1.0.19-demo.jar"
+        "lib/jfreechart-1.0.19-demo.jar"
     ]
 }
