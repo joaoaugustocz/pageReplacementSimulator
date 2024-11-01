@@ -138,11 +138,11 @@ public class SimuladorDeSubstituicaoPaginasComGraficos extends JFrame {
     // Função para gerar uma sequência aleatória de páginas
     private void gerarSequenciaAleatoria() {
         Random random = new Random();
-        int tamanhoSequencia = random.nextInt(50) + 20; // Gera uma sequência entre 5 e 15 páginas
+        int tamanhoSequencia = random.nextInt(10) + 20; // Gera uma sequência entre 5 e 15 páginas
         StringBuilder sequencia = new StringBuilder();
 
         for (int i = 0; i < tamanhoSequencia; i++) {
-            int paginaAleatoria = random.nextInt(20) + 10; // Páginas aleatórias entre 1 e 10
+            int paginaAleatoria = random.nextInt(5) + 1; // Páginas aleatórias entre 1 e 10
             sequencia.append(paginaAleatoria).append(" ");
         }
 
