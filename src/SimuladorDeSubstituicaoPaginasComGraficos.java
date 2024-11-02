@@ -117,23 +117,36 @@ public class SimuladorDeSubstituicaoPaginasComGraficos extends JFrame {
         areaResultados.append("LRU: " + resultadoLRU + " faltas de página\n");
         areaResultados.append("Relógio: " + resultadoRelogio + " faltas de página\n");
         areaResultados.append("NFU: " + resultadoNFU + " faltas de página\n");
-        areaResultados.append("Melhor: " + getMin(resultadoFIFO, resultadoLRU, resultadoRelogio, resultadoNFU) + "\n");
+        areaResultados.append("Melhor(es): " + getMin(resultadoFIFO, resultadoLRU, resultadoRelogio, resultadoNFU) + "\n");
         
 
         // Atualizar o gráfico com os resultados
         atualizarGrafico(resultadoFIFO, resultadoLRU, resultadoRelogio, resultadoNFU);
     }
 
-    private int getMin(int a, int b, int c, int d)
-    {
-         
-        // Usa a função Math.min para comparar os valores
-        int menorPrimeiroPar = Math.min(a, b);
-        int menorSegundoPar = Math.min(c, d);
+    private String getMin(int fifo, int lru, int relogio, int nfu) {
+        // Calcula o valor mínimo entre todos os valores
+        int minValue = Math.min(Math.min(fifo, lru), Math.min(relogio, nfu));
         
-        // Compara os menores valores dos dois pares
-        return Math.min(menorPrimeiroPar, menorSegundoPar);
-        
+        // Usa um StringBuilder para construir o resultado com os algoritmos que empataram
+        StringBuilder result = new StringBuilder();
+    
+        // Adiciona o nome do algoritmo ao resultado se ele tiver o valor mínimo
+        if (fifo == minValue) {
+            result.append("FIFO ");
+        }
+        if (lru == minValue) {
+            result.append("LRU ");
+        }
+        if (relogio == minValue) {
+            result.append("Relógio ");
+        }
+        if (nfu == minValue) {
+            result.append("NFU ");
+        }
+    
+        // Retorna o resultado com os nomes dos algoritmos que empataram, removendo o espaço extra no final
+        return result.toString().trim();
     }
     // Função para gerar uma sequência aleatória de páginas
     private void gerarSequenciaAleatoria() {
